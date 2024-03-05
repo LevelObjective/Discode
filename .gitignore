@@ -184,5 +184,10 @@ replit.nix
 .git/
 command/__pychace__
 venv/
+.breakpoints
+.replit
+poetry.lock
+pyproject.toml
+replit.nix
 
 # End of https://www.toptal.com/developers/gitignore/api/python,replit
