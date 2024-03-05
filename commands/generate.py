@@ -50,7 +50,7 @@ class GenerateCommand(commands.Cog):
 
             # Send the file
             with open(file_path, 'rb') as file_to_send:
-                await inter.response.send_message(content="I couldn't fit all the codes in, so I packed them neatly into a file for you!", file=disnake.File(file_to_send, filename=role.name + '_codes.txt'))
+                await inter.response.send_message(content="I couldn't fit all the codes in, so I packed them neatly into a file for you!", file=disnake.File(file_to_send, filename=role.name + '_codes.txt', ephemeral=True))
             # Delete the file
             os.remove(file_path)
 
