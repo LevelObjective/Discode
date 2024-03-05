@@ -19,9 +19,17 @@ class GenerateCommand(commands.Cog):
                    role: disnake.Role,
                    number: int = 1,
                    length: int = 8):
+        if not inter.guild.me.guild_permissions.manage_roles:
+          await inter.response.send_message("I don't have permissions to manage roles.", ephemeral=True)
+          return
+
+        # Check if the bot's highest role is above the role it's trying to assign
+        if role.position >= inter.guild.me.top_role.position:
+          await inter.response.send_message("I can't manage this role because it's equal to or higher than my highest role.", ephemeral=True)
+          return
         # Generate Codes
         codes = [''.join(random.choices(string.ascii_uppercase + string.digits, k=length)) for _ in range(number)]
-        
+
         codesAndRoleList = []
         for i in range(len(codes)):
           codesAndRoleList.append(codes[i] + " " + str(role.id))
@@ -33,7 +41,7 @@ class GenerateCommand(commands.Cog):
         with open(os.path.join('data/', str(inter.guild.id)), 'a') as f:
           for item in codesAndRoleList:
             f.write(item + "\n")
-      
+
         # Check if codes can be sent directly
         if number * length < 1512:
             await inter.response.send_message(content="Generated Codes:\n" + "\n".join(codes), ephemeral=True)

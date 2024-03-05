@@ -55,11 +55,11 @@ class RedeemCommand(commands.Cog):
     )
     async def redeem(self, inter: disnake.ApplicationCommandInteraction, code: str):
         numId_str = find_and_delete_code(code, os.path.join('data/', str(inter.guild.id)))
-        print(f"Code redeemed for role ID: {numId_str}")  # Debugging
+             
         if not numId_str:
             await inter.response.send_message("406 Not Acceptable: The Code you entered is Invalid, or was redeemed already!", ephemeral=True)
             return
-
+        
         try:
             numId = int(numId_str)
         except ValueError:
@@ -67,9 +67,20 @@ class RedeemCommand(commands.Cog):
             return
 
         redeemedRole = inter.guild.get_role(numId)
+      
         if redeemedRole is None:
             await inter.response.send_message("404 Not Found: The role associated with this code does not exist.", ephemeral=True)
             return
+        if not inter.guild.me.guild_permissions.manage_roles:
+          await inter.response.send_message("I don't have permissions to manage roles.", ephemeral=True)
+          return
+
+        role = redeemedRole
+
+        # Check if the bot's highest role is above the role it's trying to assign
+        if role.position >= inter.guild.me.top_role.position:
+          await inter.response.send_message("I can't manage this role because it's equal to or higher than my highest role. Reach out to the admins to fix it!", ephemeral=True)
+          return
 
         await inter.author.add_roles(redeemedRole)
         await inter.response.send_message(f"The role <@&{numId}> has been added!", ephemeral=True)
