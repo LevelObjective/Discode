@@ -191,3 +191,9 @@ pyproject.toml
 replit.nix
 
 # End of https://www.toptal.com/developers/gitignore/api/python,replit
+
+.venv/
+main.env
+dev.env
+.env
+.vscode

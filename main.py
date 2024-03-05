@@ -1,7 +1,18 @@
 import os
+import dotenv
+
+try:  
+   dotenv.load_dotenv('dev.env')
+except KeyError: 
+   print("dev.env not found")
+   exit(1)
+token = os.getenv('TOKEN')
+
+print(token)
+
 import disnake
 from disnake.ext import commands
-token = os.environ['TOKEN']
+
 
 bot = commands.InteractionBot()
 
