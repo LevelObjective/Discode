@@ -21,11 +21,14 @@ class GenerateCommand(commands.Cog):
                    length: int = 8):
         # Generate Codes
         codes = [''.join(random.choices(string.ascii_uppercase + string.digits, k=length)) for _ in range(number)]
-
+        
         codesAndRoleList = []
         for i in range(len(codes)):
           codesAndRoleList.append(codes[i] + " " + str(role.id))
           i += 1
+
+        # Make sure 'data' exists
+        os.makedirs('data', exist_ok=True)
         # Save the Data
         with open(os.path.join('data/', str(inter.guild.id)), 'a') as f:
           for item in codesAndRoleList:
